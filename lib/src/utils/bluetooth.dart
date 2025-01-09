@@ -18,5 +18,6 @@ class BluetoothFunctions {
 
     debug.append(text: 'Finished Bluetooth Waiting Action!');
   }
+
   // Insert other methods here if needed
 }

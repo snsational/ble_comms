@@ -39,7 +39,7 @@ class BluetoothActionButton extends StatelessWidget {
                     onPressed: () async {
                       await BluetoothFunctions.bluetoothActionIdle(
                           debugController: debugController).then((a) {
-                            status.value = ActionBtnStatus.listening;
+                        status.value = cycle(value);
                       });
                     },
                   );
@@ -49,10 +49,13 @@ class BluetoothActionButton extends StatelessWidget {
                     onPressed: () async {
                       await BluetoothFunctions.bluetoothActionListening(
                           debugController: debugController).then((a){
-                            status.value = ActionBtnStatus.idle;
+                        status.value = cycle(value);
                       });
                     },
                   );
+
+                  // Add more cases here if you created more ActionBtnStatus
+
               }
             },
           ),
