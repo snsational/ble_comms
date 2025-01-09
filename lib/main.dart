@@ -1,5 +1,5 @@
-import 'package:ble_comms/controllers/debug_controller.dart';
-import 'package:ble_comms/widgets/actionbtn.dart';
+import 'package:ble_comms/src/utils/debug_handler.dart';
+import 'package:ble_comms/src/components/buttons/actionbtn.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -58,7 +58,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  DebugController debug = DebugController();
+  DebugHandler debug = DebugHandler();
 
   @override
   Widget build(BuildContext context) {

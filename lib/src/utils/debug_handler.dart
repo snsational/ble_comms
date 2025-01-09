@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 
-class DebugController {
+class DebugHandler {
   static final timeFormatter = DateFormat('HH:mm:ss');
   final ValueNotifier<String> message = ValueNotifier<String>("");
 

@@ -1,7 +1,7 @@
-import 'package:ble_comms/controllers/debug_controller.dart';
+import 'package:ble_comms/src/utils/debug_handler.dart';
 import 'package:flutter/material.dart';
-import '../controllers/actionbtn_controller.dart';
-import '../functions/bluetooth.dart';
+import 'actionbtn_status.dart';
+import '../../utils/bluetooth.dart';
 
 class BluetoothActionButton extends StatelessWidget {
   /// Creates a form button that validates the form contents. The user inserts
@@ -14,7 +14,7 @@ class BluetoothActionButton extends StatelessWidget {
     required this.debugController,
   });
 
-  final DebugController debugController;
+  final DebugHandler debugController;
 
   final ValueNotifier<ActionBtnStatus> status =
       ValueNotifier<ActionBtnStatus>(ActionBtnStatus.idle);
