@@ -37,7 +37,13 @@ lib
 
 ```
 
-In the `components` directory we placed every custom widget that the app uses. In this case, we only created a button with an action and custom status for the button. When you press the button, it will cycle through the status and do different actions for each. If you feel the need to add more status or edit them, you can do so by:
+In the `components` directory we placed every custom widget that the app uses. In this case, we only created a button with an action and custom status for the button. When you press the button, it will cycle through the status and do different actions for each. If you feel the need to add more status or edit them, you can do so in the chapter "[Adding a new status](#adding-a-new-status)".
+
+In the `config` folder we placed every constant related to the app, like custom colors, in the `custom_colors.dart`. Feel free to create any custom styling for the app and add it to a class in a separate file in this directory.
+
+In the `utils` folder, we placed everything custom methods, like the bluetooth button actions and the debug handler. Feel free to add any new file with your custom methods that you might need.
+
+# Adding a new status
 
 - First, in the `actionbtn_status.dart` file, add any new status that you want below the other already created statuses:
 
@@ -91,4 +97,8 @@ case ActionBtnStatus.<yourNewActionName>:
 
 In this example, replace `<yourNewActionName>` with the name of the action that you created on the file `lib/src/components/button/actionbtn_status.dart`. Replace `<iconOfYourChoice>` with an icon that you want to be displayed on the button when this action is cycled (You can find a list of all the icons [here](https://api.flutter.dev/flutter/material/Icons-class.html)). Replace `<yourNewActionMethod>` with the method created in the file `/lib/src/components/buttons/actionbtn.dart`.
 
-This is the structure we follow for our projects, but feel free to add/change it accoording to your needs.
+# Running the app
+While developing in flutter, you will need to run the project in a device (virtual or physical). To do that, you might create a new Virtual device (Android Emulator or an iOS Simulator, depending on your operating system. Note that MacOS can create both, but you'll need XCode installed in your machine). [Here](https://developer.android.com/studio/run/managing-avds) is a guide to manage your Android Virtual Devices and [here](https://docs.flutter.dev/platform-integration/android/install-android/install-android-from-windows) is a guide to configure your target Android device. You can also connect your own smartphone to your machine in order to debug your project.
+
+# Bluetooth packages
+[Here](https://pub.dev/packages/flutter_blue_plus) is an example of a bluetooth package that you can add to your project. It is only an example, so feel free to add any other package that you see fit for this project. In [Pub Dev](https://pub.dev/) you can search for any custom packages and add it to the project, following the instructions given on the package page. There you can find instructions on how to install the package and also instructions and examples on how to implement the package.

@@ -1,3 +1,4 @@
+import 'package:ble_comms/src/config/constants/custom_colors.dart';
 import 'package:ble_comms/src/utils/debug_handler.dart';
 import 'package:ble_comms/src/components/buttons/actionbtn.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +32,7 @@ class MyApp extends StatelessWidget {
         //
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightBlue),
+        colorScheme: ColorScheme.fromSeed(seedColor: CustomColors.primaryColor),
         useMaterial3: true,
       ),
       home: const MyHomePage(title: 'BLE Demo'),
