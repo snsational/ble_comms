@@ -22,7 +22,7 @@ class BluetoothFunctions {
 
     // Start scanning for devices
     debug.append(text: 'Scanning for devices...');
-    FlutterBluePlus.startScan(withNames: ["RS-00000466"], timeout: Duration(seconds: 10));
+    FlutterBluePlus.startScan(withNames: ["RS-00000466"], timeout: Duration(seconds: 30));
 
     FlutterBluePlus.scanResults.listen((results) async {
       for (ScanResult result in results) {
@@ -100,13 +100,12 @@ class BluetoothFunctions {
   static Future<void> sendLoginMessage(BluetoothCharacteristic characteristic, DebugHandler debug) async {
     try {
       debug.append(text: 'Sending login message...');
-      String loginMessage = jsonEncode({
-        "a": "login",
-        "uid": "123"
-      });
-      List<int> byteData = utf8.encode(loginMessage);
-
-      // Write the login message to the characteristic using "WRITE WITHOUT RESPONSE"
+      Map<String, dynamic> loginMessage = {
+        "a": "login-done", // Action
+        "uid": "5995ac98fa9c3d23b87a11a4" // User ID
+      };
+      String jsonString = jsonEncode(loginMessage);
+      List<int> byteData = utf8.encode(jsonString);
       await characteristic.write(byteData, withoutResponse: true);
       debug.append(text: 'Login message sent');
     } catch (e) {
@@ -123,23 +122,7 @@ class BluetoothFunctions {
           debug.append(text: 'Received: $message');
           debug.append(text: 'ATC received!');
         }
-        try {
-          await characteristic.setNotifyValue(false);
-          debug.append(text: 'Sending login message...');
-          String loginMessage = jsonEncode({
-            "a": "login",
-            "uid": "5995ac98fa9c3d23b87a11a4",
-            "l": "1"
-          });
-          List<int> byteData = utf8.encode(loginMessage);
-
-          // Write the login message to the characteristic using "WRITE WITHOUT RESPONSE"
-          await characteristic.write(byteData, withoutResponse: true);
-          debug.append(text: 'Login message sent');
-          await characteristic.setNotifyValue(true);
-        } catch (e) {
-          debug.append(text: 'Error sending login message: $e');
-        }
+        sendLoginMessage(characteristic, debug);
       }
 
       if (message.contains('"a":"login-done"')) {
