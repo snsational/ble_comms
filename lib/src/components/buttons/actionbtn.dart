@@ -38,7 +38,8 @@ class BluetoothActionButton extends StatelessWidget {
                     child: Icon(Icons.bluetooth_outlined),
                     onPressed: () async {
                       await BluetoothFunctions.bluetoothActionIdle(
-                          debugController: debugController).then((a) {
+                        debugController: debugController,
+                      ).then((_) {
                         status.value = cycle(value);
                       });
                     },
