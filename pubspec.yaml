@@ -36,7 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   get: ^4.6.6
   intl: ^0.20.1
-  flutter_blue_plus: ^1.35.0
+  flutter_blue_plus: ^1.35.2
   permission_handler: ^10.2.0
 
 dev_dependencies:

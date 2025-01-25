@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'debug_handler.dart';
 import 'dart:convert';
@@ -22,7 +23,7 @@ class BluetoothFunctions {
 
     // Start scanning for devices
     debug.append(text: 'Scanning for devices...');
-    FlutterBluePlus.startScan(withNames: ["RS-00000466"], timeout: Duration(seconds: 30));
+    FlutterBluePlus.startScan(withNames: ["RS-00000466"], timeout: Duration(seconds: 10));
 
     FlutterBluePlus.scanResults.listen((results) async {
       for (ScanResult result in results) {
@@ -85,12 +86,14 @@ class BluetoothFunctions {
 
       // Listen for notifications
       bool atcReceived = false;
-      targetCharacteristic.onValueReceived.listen((value) {
+      final subscription = targetCharacteristic.lastValueStream.listen((value) {
         handleNotification(value, targetCharacteristic, debug, atcReceived);
         if (!atcReceived && utf8.decode(value).contains('"a":"atc"')) {
           atcReceived = true; // Ensure only the first "atc" is handled
         }
       });
+
+      device.cancelWhenDisconnected(subscription);
 
     } catch (e) {
       debug.append(text: 'Error: $e');
@@ -100,12 +103,14 @@ class BluetoothFunctions {
   static Future<void> sendLoginMessage(BluetoothCharacteristic characteristic, DebugHandler debug) async {
     try {
       debug.append(text: 'Sending login message...');
-      Map<String, dynamic> loginMessage = {
-        "a": "login-done", // Action
-        "uid": "5995ac98fa9c3d23b87a11a4" // User ID
-      };
-      String jsonString = jsonEncode(loginMessage);
-      List<int> byteData = utf8.encode(jsonString);
+      String loginMessage = jsonEncode({
+        "a": "login",
+        "uid": "5995ac98fa9c3d23b87a11a4",
+        "l": 1
+      }).trim();
+      List<int> byteData = utf8.encode(loginMessage);
+
+      // Write the login message to the characteristic using "WRITE WITHOUT RESPONSE"
       await characteristic.write(byteData, withoutResponse: true);
       debug.append(text: 'Login message sent');
     } catch (e) {
@@ -119,14 +124,12 @@ class BluetoothFunctions {
       debug.append(text: 'Received: $message');
       if (message.contains('"a":"atc"')) {
         if (!atcReceived) {
-          debug.append(text: 'Received: $message');
           debug.append(text: 'ATC received!');
+          sendLoginMessage(characteristic, debug);
         }
-        sendLoginMessage(characteristic, debug);
       }
 
       if (message.contains('"a":"login-done"')) {
-        debug.append(text: 'Received: $message');
         debug.append(text: 'Login complete!');
       }
     } catch (e) {
