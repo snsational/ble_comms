@@ -23,7 +23,9 @@ class BluetoothFunctions {
 
     // Start scanning for devices
     debug.append(text: 'Scanning for devices...');
-    FlutterBluePlus.startScan(withNames: ["RS-00000466"], timeout: Duration(seconds: 10));
+    FlutterBluePlus.startScan(
+        withNames: ["RS-00000320"],
+        timeout: Duration(seconds: 10));
 
     FlutterBluePlus.scanResults.listen((results) async {
       for (ScanResult result in results) {
@@ -62,6 +64,7 @@ class BluetoothFunctions {
           );
         }
       }*/
+
       // Find the required service and characteristic
       BluetoothService targetService = services.firstWhere(
             (s) => s.uuid.toString() == '49535343-fe7d-4ae5-8fa9-9fafd205e455',
@@ -103,15 +106,33 @@ class BluetoothFunctions {
   static Future<void> sendLoginMessage(BluetoothCharacteristic characteristic, DebugHandler debug) async {
     try {
       debug.append(text: 'Sending login message...');
+
+      String loginMessage = '{"a":"login","uid","5995ac98fa9c3d23b87a11a4","l":"0"}';
+
+      /*jsonEncode({
+        "a":"login",
+        "uid":"5995ac98fa9c3d23b87a11a4", // Needs to be 24 characters as String
+        "l":"0" // Needs to be a String
+      }).trim();
+      */
+
+
+
+
+      /*
       String loginMessage = jsonEncode({
         "a": "login",
         "uid": "5995ac98fa9c3d23b87a11a4",
-        "l": 1
-      }).trim();
+        "l": 0
+      }).trim(); */
+      // List<int> byteData = utf8.encode(loginMessage);
+
+
       List<int> byteData = utf8.encode(loginMessage);
 
       // Write the login message to the characteristic using "WRITE WITHOUT RESPONSE"
-      await characteristic.write(byteData, withoutResponse: true);
+      // await characteristic.write(byteData, withoutResponse: true);
+      await characteristic.write(byteData, withoutResponse: false);
       debug.append(text: 'Login message sent');
     } catch (e) {
       debug.append(text: 'Error sending login message: $e');
@@ -125,7 +146,7 @@ class BluetoothFunctions {
       if (message.contains('"a":"atc"')) {
         if (!atcReceived) {
           debug.append(text: 'ATC received!');
-          sendLoginMessage(characteristic, debug);
+          await sendLoginMessage(characteristic, debug);
         }
       }
 
