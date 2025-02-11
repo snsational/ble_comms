@@ -75,35 +75,37 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      body: ValueListenableBuilder<String>(
-        builder: (BuildContext context, String value, Widget? child) {
-          // This builder will only get called when the _counter
-          // is updated.
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                const Text(
-                  'Debug messages will appear below:',
-                ),
-                Text(
-                  debug.message.value,
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
-              ],
+      body: SingleChildScrollView(
+        child: ValueListenableBuilder<String>(
+          builder: (BuildContext context, String value, Widget? child) {
+            // This builder will only get called when the _counter
+            // is updated.
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  const Text(
+                    'Debug messages will appear below:',
+                  ),
+                  Text(
+                    debug.message.value,
+                    style: TextStyle(fontSize: 12, color: debug.color.value),
+                  ),
+                ],
+              ),
+            );
+          },
+          valueListenable: debug.message,
+          // The child parameter is most helpful if the child is
+          // expensive to build and does not depend on the value from
+          // the notifier.
+          child: const Padding(
+            padding: EdgeInsets.all(10.0),
+            child: SizedBox(
+              width: 40,
+              height: 40,
+              child: FlutterLogo(size: 40),
             ),
-          );
-        },
-        valueListenable: debug.message,
-        // The child parameter is most helpful if the child is
-        // expensive to build and does not depend on the value from
-        // the notifier.
-        child: const Padding(
-          padding: EdgeInsets.all(10.0),
-          child: SizedBox(
-            width: 40,
-            height: 40,
-            child: FlutterLogo(size: 40),
           ),
         ),
       ),
