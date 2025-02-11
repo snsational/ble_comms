@@ -25,6 +25,10 @@ class BLEMessageHandler {
     return targetCharacteristic.lastValueStream.listen((value) async {
       message += utf8.decode(value);
       if (BLEMessageHandler.isMessageComplete(message: message)) {
+        /* Checks if the message is complete. If not, then listen to the next
+         * message and appends it until the message is complete, so it can be
+         * handled */
+
         // debug.append(text: message);
         String finalMessage = message;
         Map<String, dynamic> result = jsonDecode(finalMessage);
@@ -52,6 +56,7 @@ class BLEMessageHandler {
             debug.append(text: 'User recycled ${response.getCategory()} and kept the door open for ${response.openDoorDuration}ms');
             break;
         }
+        /* Clears the message, as it was already handled */
         message = '';
       }
     });
@@ -62,6 +67,7 @@ class BLEMessageHandler {
   static Future<void> sendLoginMessage(
       BluetoothCharacteristic characteristic, DebugHandler debug, int userId) async {
     try {
+      /* Pads the rest of the characters as 0 for the remainder of 24 */
       String uid = (userId.toString().padLeft(24, "0"));
       debug.append(text: 'Sending login message request for user $userId');
       String loginMessage =
